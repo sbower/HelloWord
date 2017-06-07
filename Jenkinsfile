@@ -11,13 +11,9 @@ node() {
 
     // Next area of our job is to do some logic around versioning our build.
     stage name: 'Version Handling'
-    def version = null
-    if (binding.variables.get('RELEASE_TYPE') == 'release') {
-        version = "${MAJOR}.${MINOR}.${PATCH}.${env.BUILD_NUMBER}"
-    } else {
-        branch = ("branch-${env.BUILD_NUMBER}-${env.BRANCH_NAME}" =~ /\\|\/|:|"|<|>|\||\?|\*|\-/).replaceAll("_")
-        version = "0.0.0-${branch}.${env.BUILD_NUMBER}"
-    }
+
+    branch = ("branch-${env.BUILD_NUMBER}-${env.BRANCH_NAME}" =~ /\\|\/|:|"|<|>|\||\?|\*|\-/).replaceAll("_")
+    version = "0.0.0-${branch}.${env.BUILD_NUMBER}"
 
     // Let's write a file to the workspace with our version information
     writeFile([file: 'version.txt', text: version])
